@@ -32,14 +32,14 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** Re-running ingest skips unchanged files; ledger row counts match ground truth.
 
-## Phase 3 — Hybrid query + reconcile
+## Phase 3 — Hybrid query + reconcile ✅
 
-- [ ] BM25 index over chunk text / IDs  
-- [ ] SQL filters (`total_amount > N`, vendor, date range)  
-- [ ] Hybrid retriever merge  
-- [ ] Reconcile engine: invoice qty vs report received qty  
-- [ ] `POST /api/query` → answer, sources, alerts, markdown block  
-- [ ] LLM explain path via ollama / openai  
+- [x] BM25 index over chunk text / IDs  
+- [x] SQL filters (`total_amount > N`, vendor, date range)  
+- [x] Hybrid retriever merge (RRF: vector + BM25)  
+- [x] Reconcile engine: invoice qty vs report received qty  
+- [x] `POST /api/query` → answer, sources, alerts, markdown block  
+- [x] LLM explain path via ollama / openai / mock  
 
 **Accept:** Golden case `qty_discrepancy` returns Discrepancy Alert with correct numbers even if LLM is mocked.
 

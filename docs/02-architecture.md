@@ -55,12 +55,14 @@ FastAPI
 
 ## Query pipeline
 
-1. Classify intent lightly (spend aggregate vs reconcile vs contract terms) — rules or small prompt.  
-2. Apply **SQL / metadata filters** when the question implies numbers or IDs.  
-3. **Hybrid retrieve**: filtered ledger hits + BM25 (invoice #, SKU) + vector chunks.  
-4. For reconcile intents: pull invoice rows + report rows for same vendor/SKU/date window → compare in code.  
-5. Build a structured context pack (numbers already computed).  
-6. LLM produces answer + markdown summary table; never invents totals that contradict the pack.
+1. Parse intent with lightweight rules (spend / filter / reconcile / contract).  
+2. Apply **SQL ledger** filters/aggregates when the question implies numbers or IDs.  
+3. **Hybrid retrieve**: BM25 (IDs/SKUs) + Chroma vectors, merged with reciprocal rank fusion.  
+4. For reconcile intents: compare invoice qty vs report `received_qty` in code → **Discrepancy Alert**.  
+5. Build a structured facts pack (numbers already computed).  
+6. LLM (ollama | openai | mock) explains without changing totals; response includes markdown dashboard.
+
+API: `POST /api/query` `{ "question": "...", "use_llm": true }`.
 
 ## Config surface (env)
 

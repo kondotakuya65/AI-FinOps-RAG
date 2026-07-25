@@ -114,6 +114,15 @@ python -m app.ingest.cli
 
 Set `EMBEDDING_PROVIDER=hash` for offline/tests (no model download). Default is `local` (sentence-transformers).
 
+Ask a FinOps question (after ingest):
+
+```bash
+curl -s http://localhost:8000/api/query -H "Content-Type: application/json" ^
+  -d "{\"question\": \"Are there quantity mismatches for SKU-1001?\", \"use_llm\": true}"
+```
+
+Numbers always come from the SQL ledger; the LLM only explains. Use `LLM_PROVIDER=mock` for offline demos.
+
 ### Docker (optional)
 
 ```bash
@@ -128,7 +137,7 @@ docker compose up --build
 1. **Done:** README, env knobs, backend skeleton, fixtures layout, `/docs`, Next.js shell + favicon  
 2. **Done:** Synthetic dataset + ground-truth JSON (intentional discrepancies)  
 3. **Done:** Ingest (table-aware chunks + SQL ledger + Chroma + content-hash cache)  
-4. **Query:** hybrid retrieve → reconcile → LLM explain → markdown summary  
+4. **Done:** Query (hybrid retrieve → reconcile → LLM explain → markdown)  
 5. **Next.js UI** (upload / query / alerts) + Docker Compose polish  
 6. **Eval harness** (golden Q&A)  
 7. **Stretch:** upload invoice → match PO / contract unit price alert

@@ -16,6 +16,7 @@ from app.ingest.hashing import sha256_file
 from app.ingest.pdf_invoice import parse_invoice_pdf
 from app.ingest.types import ParsedDocument
 from app.ledger.store import get_document_by_source, replace_document_ledger
+from app.retrieve.bm25 import refresh_bm25
 from app.retrieve.vector import VectorStore, get_vector_store
 
 Status = Literal["ingested", "skipped", "error"]
@@ -142,6 +143,8 @@ def ingest_paths(
             summary.skipped += 1
         else:
             summary.errors += 1
+    if summary.ingested:
+        refresh_bm25(store)
     return summary
 
 
