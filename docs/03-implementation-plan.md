@@ -21,16 +21,16 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** Opening fixtures shows readable tables; ground truth matches spreadsheet math (`pytest` + `scripts/generate_fixtures.py`).
 
-## Phase 2 — Ingest + ledger + index
+## Phase 2 — Ingest + ledger + index ✅
 
-- [ ] `pdfplumber` invoice tables → DataFrame  
-- [ ] Excel/DOCX parsers  
-- [ ] Header-aware row-group chunking + metadata  
-- [ ] SQLAlchemy models: Document, LineItem, QueryRun  
-- [ ] Chroma upsert + **content-hash cache**  
-- [ ] CLI or `POST /api/ingest` to load `fixtures/`  
+- [x] `pdfplumber` invoice tables → DataFrame/structured lines  
+- [x] Excel/DOCX parsers  
+- [x] Header-aware row-group chunking + metadata  
+- [x] SQLAlchemy models: Document, LineItem, QueryRun  
+- [x] Chroma upsert + **content-hash cache**  
+- [x] CLI (`python -m app.ingest.cli`) + `POST /api/ingest`  
 
-**Accept:** Re-running ingest does not re-embed unchanged files; ledger row counts match ground truth.
+**Accept:** Re-running ingest skips unchanged files; ledger row counts match ground truth.
 
 ## Phase 3 — Hybrid query + reconcile
 

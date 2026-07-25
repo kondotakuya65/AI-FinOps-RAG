@@ -88,25 +88,31 @@ flowchart TB
 
 ---
 
-## Quick start (skeleton)
+## Quick start
+
+### Backend
 
 ```bash
-cp .env.example .env
-# set LLM_PROVIDER=ollama and ensure `ollama pull phi3:mini`
-# or set LLM_PROVIDER=openai and OPENAI_API_KEY
-
 cd backend
 python -m venv .venv
 # Windows: .venv\Scripts\Activate.ps1
-# macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
+Ingest fixtures (ledger + Chroma):
+
+```bash
+python -m app.ingest.cli
+# or POST http://localhost:8000/api/ingest  {"load_fixtures": true}
+# re-run skips unchanged files (content-hash cache); use --force to rebuild
+```
+
 - API docs: http://localhost:8000/docs  
 - Health: http://localhost:8000/api/health  
+- Ingest status: http://localhost:8000/api/ingest/status  
 
-Frontend and full ingest/query pipelines land in follow-up commits.
+Set `EMBEDDING_PROVIDER=hash` for offline/tests (no model download). Default is `local` (sentence-transformers).
 
 ### Docker (optional)
 
@@ -121,11 +127,11 @@ docker compose up --build
 
 1. **Done:** README, env knobs, backend skeleton, fixtures layout, `/docs`, Next.js shell + favicon  
 2. **Done:** Synthetic dataset + ground-truth JSON (intentional discrepancies)  
-3. **Ingest:** table-aware chunking + SQL ledger + Chroma index + content-hash cache  
+3. **Done:** Ingest (table-aware chunks + SQL ledger + Chroma + content-hash cache)  
 4. **Query:** hybrid retrieve → reconcile → LLM explain → markdown summary  
 5. **Next.js UI** (upload / query / alerts) + Docker Compose polish  
 6. **Eval harness** (golden Q&A)  
-7. **Stretch:** upload invoice → match PO / contract unit price alert  
+7. **Stretch:** upload invoice → match PO / contract unit price alert
 
 ---
 

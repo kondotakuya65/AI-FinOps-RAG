@@ -47,11 +47,11 @@ FastAPI
 ## Ingest pipeline
 
 1. Accept file (or load from `fixtures/`).  
-2. Detect type → extract tables as DataFrames (not raw bag-of-words).  
-3. **Chunk by row groups** (e.g. 10–15 rows), **repeat headers** in every chunk.  
+2. Detect type → extract tables as structured lines (pdfplumber / pandas / python-docx).  
+3. **Chunk by row groups** (default 12 rows), **repeat headers** in every chunk + a summary chunk.  
 4. Attach metadata: `source_file`, `doc_type`, `vendor`, `invoice_id`, `currency`, `total_amount`, `period`, …  
 5. Upsert ledger rows (SKU, qty, unit_price, amount, dates).  
-6. Embed chunks → Chroma; skip if content hash unchanged.
+6. Embed chunks → Chroma; **skip if `content_sha256` unchanged** (`POST /api/ingest`, `python -m app.ingest.cli`).
 
 ## Query pipeline
 
