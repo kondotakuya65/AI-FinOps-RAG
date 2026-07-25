@@ -1,0 +1,21 @@
+{
+  "description": "Golden Q&A for FinOps RAG eval — expand when synthetic docs land.",
+  "cases": [
+    {
+      "id": "spend_vendor_q3",
+      "question": "How much did we spend on Vendor Alpha in Q3?",
+      "expect": {
+        "type": "numeric",
+        "notes": "Fill expected_amount after fixtures are generated"
+      }
+    },
+    {
+      "id": "qty_discrepancy",
+      "question": "Are there quantity mismatches between invoices and product reports for SKU-1001?",
+      "expect": {
+        "type": "discrepancy_alert",
+        "notes": "Expect Discrepancy Alert when invoice qty != received qty"
+      }
+    }
+  ]
+}

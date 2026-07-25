@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.pytest_cache/
+*.db
+backend/dev.db
+backend/.chroma/
+.chroma/
+frontend/.env*.local
+
+# Uploads / local data / vector persist
+backend/uploads/*
+!backend/uploads/.gitkeep
+backend/data/*
+!backend/data/.gitkeep
+uploads/
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+npm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Docker
+ollama_data/
