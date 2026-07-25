@@ -1,11 +1,28 @@
-# Frontend (Next.js)
+# Frontend — AI-FinOps-RAG
 
-Scaffolded in a follow-up commit to match [AI-Resume-Reviewer](https://github.com/kondotakuya65/AI-Resume-Reviewer) / [AI-Code-Reviewer-Sample](https://github.com/kondotakuya65/AI-Code-Reviewer-Sample):
+Next.js App Router UI for FinOps query, upload, and discrepancy views.
 
-- App Router + TypeScript
-- Upload invoices / reports
-- Ask FinOps questions
-- Discrepancy dashboard (summary table + alerts)
-- Proxy `/api` → FastAPI (`API_PROXY_TARGET`)
+## Brand
 
-Until then, use the backend OpenAPI UI at http://localhost:8000/docs .
+- Favicon / icon: `public/fav.png` (sourced from repo root `fav.png`)
+- App Router icon: `src/app/icon.png` (same asset)
+
+## Quick start
+
+```bash
+cp ../.env.example ../.env   # optional; API proxy defaults to :8000
+npm install
+npm run dev
+```
+
+Open http://localhost:3000
+
+`next.config.ts` rewrites `/api/*` → `API_PROXY_TARGET` (default `http://localhost:8000`).
+
+## Planned screens
+
+1. Corpus status + upload  
+2. Query console  
+3. Answer + markdown summary + **Discrepancy Alert** panel  
+
+See [docs/03-implementation-plan.md](../docs/03-implementation-plan.md) Phase 4.

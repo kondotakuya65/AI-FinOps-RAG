@@ -13,6 +13,8 @@ Portfolio sample: **table-aware RAG** for vendor invoices, product reports, and 
 
 Differentiates from narrative RAG ([AI-Resume-Reviewer](https://github.com/kondotakuya65/AI-Resume-Reviewer)) and code RAG ([AI-Code-Reviewer-Sample](https://github.com/kondotakuya65/AI-Code-Reviewer-Sample)).
 
+**Docs:** [Scenario](docs/01-scenario.md) · [Architecture](docs/02-architecture.md) · [Implementation plan](docs/03-implementation-plan.md) · [Data & eval](docs/04-data-and-eval.md) · [Design decisions](docs/05-design-decisions.md) · [Docs index](docs/README.md)
+
 ---
 
 ## Architecture
@@ -122,11 +124,11 @@ docker compose up --build
 
 ## Roadmap
 
-1. **Done (this commit):** README, env knobs, backend skeleton, fixtures layout  
+1. **Done:** README, env knobs, backend skeleton, fixtures layout, `/docs`, Next.js shell + favicon  
 2. **Synthetic dataset** + ground-truth JSON (intentional discrepancies)  
 3. **Ingest:** table-aware chunking + SQL ledger + Chroma index + content-hash cache  
 4. **Query:** hybrid retrieve → reconcile → LLM explain → markdown summary  
-5. **Next.js UI** + Docker Compose polish  
+5. **Next.js UI** (upload / query / alerts) + Docker Compose polish  
 6. **Eval harness** (golden Q&A)  
 7. **Stretch:** upload invoice → match PO / contract unit price alert  
 
