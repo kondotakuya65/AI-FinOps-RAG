@@ -98,7 +98,14 @@ def get_embedder(provider: str | None = None) -> Embedder:
             raise ValueError("OPENAI_API_KEY required when EMBEDDING_PROVIDER=openai")
         return OpenAIEmbedder(settings.openai_api_key, settings.openai_embedding_model)
     if name == "local":
-        return LocalEmbedder(settings.embedding_model)
+        try:
+            return LocalEmbedder(settings.embedding_model)
+        except ModuleNotFoundError as exc:
+            raise ModuleNotFoundError(
+                "sentence-transformers is required when EMBEDDING_PROVIDER=local. "
+                "Run: pip install sentence-transformers "
+                "or set EMBEDDING_PROVIDER=hash for offline demos."
+            ) from exc
     raise ValueError(f"Unsupported EMBEDDING_PROVIDER: {name}")
 
 

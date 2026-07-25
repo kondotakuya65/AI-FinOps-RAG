@@ -43,13 +43,13 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** Golden case `qty_discrepancy` returns Discrepancy Alert with correct numbers even if LLM is mocked.
 
-## Phase 4 — Next.js UI
+## Phase 4 — Next.js UI ✅
 
-- [ ] App shell with brand favicon  
-- [ ] Upload + corpus status  
-- [ ] Query box + answer / alert panel  
-- [ ] Proxy `/api` → FastAPI  
-- [ ] Wire into docker-compose  
+- [x] App shell with brand favicon  
+- [x] Upload + corpus status  
+- [x] Query box + answer / alert panel  
+- [x] Proxy `/api` → FastAPI  
+- [x] Wire into docker-compose  
 
 **Accept:** Full demo story from [01-scenario](./01-scenario.md) without using Swagger.
 

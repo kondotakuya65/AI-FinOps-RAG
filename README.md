@@ -123,12 +123,26 @@ curl -s http://localhost:8000/api/query -H "Content-Type: application/json" ^
 
 Numbers always come from the SQL ledger; the LLM only explains. Use `LLM_PROVIDER=mock` for offline demos.
 
+### Frontend
+
+```bash
+cd frontend
+cp .env.local.example .env.local
+npm install
+npm run dev
+```
+
+Open http://localhost:3000 — **Load fixtures**, then use a demo question (e.g. SKU-1001 discrepancy).
+
 ### Docker (optional)
 
 ```bash
 cp .env.example .env
 docker compose up --build
 ```
+
+- UI: http://localhost:3000  
+- API: http://localhost:8000/docs  
 
 ---
 
@@ -138,7 +152,7 @@ docker compose up --build
 2. **Done:** Synthetic dataset + ground-truth JSON (intentional discrepancies)  
 3. **Done:** Ingest (table-aware chunks + SQL ledger + Chroma + content-hash cache)  
 4. **Done:** Query (hybrid retrieve → reconcile → LLM explain → markdown)  
-5. **Next.js UI** (upload / query / alerts) + Docker Compose polish  
+5. **Done:** Next.js UI (upload / query / alerts) + Docker Compose  
 6. **Eval harness** (golden Q&A)  
 7. **Stretch:** upload invoice → match PO / contract unit price alert
 

@@ -10,8 +10,12 @@ services:
       DATABASE_URL: postgresql+psycopg2://finops:finops@db:5432/finops_rag
       CHROMA_PERSIST_DIR: /data/chroma
       UPLOAD_DIR: /data/uploads
+      FIXTURES_DIR: /fixtures
+      EMBEDDING_PROVIDER: ${EMBEDDING_PROVIDER:-hash}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
     volumes:
       - finops_data:/data
+      - ./fixtures:/fixtures:ro
     depends_on:
       - db
 
@@ -26,8 +30,17 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # frontend: added when Next.js app is scaffolded
-  # ollama: use host Ollama or `docker compose --profile ollama`
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        API_PROXY_TARGET: http://api:8000
+    ports:
+      - "3000:3000"
+    environment:
+      API_PROXY_TARGET: http://api:8000
+    depends_on:
+      - api
 
 volumes:
   finops_data:

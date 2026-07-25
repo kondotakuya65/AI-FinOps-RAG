@@ -26,6 +26,7 @@ class Settings(BaseSettings):
     ollama_model: str = "phi3:mini"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
+    llm_timeout_seconds: float = 25.0
 
     # local | openai | hash (deterministic, for tests / offline CI)
     embedding_provider: str = "local"

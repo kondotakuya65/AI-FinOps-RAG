@@ -26,9 +26,10 @@ class MockLLMClient:
 
 
 class OllamaClient:
-    def __init__(self, base_url: str, model: str) -> None:
+    def __init__(self, base_url: str, model: str, timeout: float = 25.0) -> None:
         self.base_url = base_url.rstrip("/")
         self.model = model
+        self.timeout = timeout
 
     def complete(self, system: str, user: str) -> str:
         payload = {
@@ -38,8 +39,9 @@ class OllamaClient:
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
+            "options": {"num_predict": 256},
         }
-        with httpx.Client(timeout=120.0) as client:
+        with httpx.Client(timeout=self.timeout) as client:
             response = client.post(f"{self.base_url}/api/chat", json=payload)
             response.raise_for_status()
             data = response.json()
@@ -47,9 +49,10 @@ class OllamaClient:
 
 
 class OpenAIClient:
-    def __init__(self, api_key: str, model: str) -> None:
+    def __init__(self, api_key: str, model: str, timeout: float = 25.0) -> None:
         self.api_key = api_key
         self.model = model
+        self.timeout = timeout
 
     def complete(self, system: str, user: str) -> str:
         headers = {
@@ -62,8 +65,9 @@ class OpenAIClient:
                 {"role": "system", "content": system},
                 {"role": "user", "content": user},
             ],
+            "max_tokens": 400,
         }
-        with httpx.Client(timeout=120.0) as client:
+        with httpx.Client(timeout=self.timeout) as client:
             response = client.post(
                 "https://api.openai.com/v1/chat/completions",
                 headers=headers,
@@ -77,12 +81,13 @@ class OpenAIClient:
 def get_llm_client(settings: Settings | None = None) -> LLMClient:
     settings = settings or get_settings()
     provider = settings.llm_provider.lower()
+    timeout = settings.llm_timeout_seconds
     if provider == "mock":
         return MockLLMClient()
     if provider == "openai":
         if not settings.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required when LLM_PROVIDER=openai")
-        return OpenAIClient(settings.openai_api_key, settings.openai_model)
+        return OpenAIClient(settings.openai_api_key, settings.openai_model, timeout=timeout)
     if provider == "ollama":
-        return OllamaClient(settings.ollama_base_url, settings.ollama_model)
+        return OllamaClient(settings.ollama_base_url, settings.ollama_model, timeout=timeout)
     raise ValueError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}")
