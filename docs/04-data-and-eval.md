@@ -66,17 +66,28 @@ Generators write PDFs/XLSX **from** this truth so eval never depends on brittle 
 
 ## Golden Q&A
 
-Starter file: `fixtures/evals/golden_qa.json`.
-
-Eval types:
+File: `fixtures/evals/golden_qa.json` (8 cases).
 
 | `expect.type` | Pass condition |
 | --- | --- |
-| `numeric` | Answer (or structured field) within tolerance of `expected_amount` |
-| `discrepancy_alert` | Response includes alert; quantities match ground truth |
-| `citation` | Listed `source_file` / `invoice_id` intersects expected set |
+| `numeric` | `facts.spend.total_amount` within `tolerance` (default 0.01) |
+| `discrepancy_alert` | Matching alert SKU/invoice/qty/period + Discrepancy wording |
+| `citation` | Invoice IDs / payment terms / source file present |
+| `alert_count` | At least `min_count` alerts |
 
-Run evals with LLM **mocked** for CI; optional live LLM smoke job locally.
+Run:
+
+```bash
+cd backend
+# offline
+set EMBEDDING_PROVIDER=hash
+set LLM_PROVIDER=mock
+pytest tests/test_eval_runner.py -q
+# or
+python -m app.eval.cli
+```
+
+CI (`.github/workflows/ci.yml`) runs the same offline eval plus a frontend build.
 
 ## Caching note
 

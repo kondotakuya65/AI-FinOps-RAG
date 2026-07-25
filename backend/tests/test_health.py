@@ -11,4 +11,4 @@ def test_health_ok() -> None:
     body = response.json()
     assert body["status"] == "ok"
     assert body["service"] == "ai-finops-rag"
-    assert body["llm_provider"] in {"ollama", "openai", "mock"}
+    assert body["llm_provider"] in {"ollama", "openai", "anthropic", "mock"}

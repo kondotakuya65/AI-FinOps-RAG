@@ -5,7 +5,7 @@
 | Decision | Rationale |
 | --- | --- |
 | Next.js + FastAPI | Same full-stack shape as Code Reviewer & Resume Reviewer |
-| `LLM_PROVIDER=ollama\|openai` | One adapter; local `phi3:mini` demos without spend |
+| `LLM_PROVIDER=ollama\|openai\|anthropic\|mock` | One adapter; local `phi3:mini` demos without spend |
 | `DATABASE_URL` sqlite \| postgres | Fast laptop demo vs Docker “real” DB |
 | docker-compose | Optional one-command path for recruiters |
 

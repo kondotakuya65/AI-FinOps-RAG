@@ -53,12 +53,13 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** Full demo story from [01-scenario](./01-scenario.md) without using Swagger.
 
-## Phase 5 — Eval + polish
+## Phase 5 — Eval + polish ✅
 
-- [ ] Expand `fixtures/evals/golden_qa.json`  
-- [ ] `pytest` eval runner (numeric tolerance + alert presence)  
-- [ ] README screenshots  
-- [ ] Optional: Anthropic provider for parity with Resume Reviewer  
+- [x] Expand `fixtures/evals/golden_qa.json`  
+- [x] `pytest` eval runner (numeric tolerance + alert presence)  
+- [x] README demo / screenshots section  
+- [x] Optional: Anthropic provider for parity with Resume Reviewer  
+- [x] GitHub Actions CI (backend golden eval + frontend build)  
 
 **Accept:** CI runs unit tests + offline eval with mocked LLM.
 

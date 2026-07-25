@@ -1,5 +1,6 @@
 {
-  "description": "Golden Q&A for FinOps RAG eval \u2014 aligned with fixtures/ground_truth.json",
+  "description": "Golden Q&A for FinOps RAG eval — aligned with fixtures/ground_truth.json",
+  "tolerance": 0.01,
   "cases": [
     {
       "id": "spend_vendor_q3",
@@ -10,11 +11,19 @@
         "period": "2024-Q3",
         "expected_amount": 10675.22,
         "currency": "USD",
-        "invoice_ids": [
-          "INV-101",
-          "INV-102",
-          "INV-103"
-        ]
+        "invoice_ids": ["INV-101", "INV-102", "INV-103"]
+      }
+    },
+    {
+      "id": "spend_beta_q3",
+      "question": "How much did we spend on Beta Parts in Q3 2024?",
+      "expect": {
+        "type": "numeric",
+        "vendor": "Beta Parts",
+        "period": "2024-Q3",
+        "expected_amount": 5000.0,
+        "currency": "USD",
+        "invoice_ids": ["INV-201", "INV-202"]
       }
     },
     {
@@ -30,13 +39,35 @@
       }
     },
     {
+      "id": "qty_discrepancy_beta",
+      "question": "Did we receive everything billed on INV-201?",
+      "expect": {
+        "type": "discrepancy_alert",
+        "sku": "SKU-2001",
+        "invoice_id": "INV-201",
+        "invoice_qty": 200,
+        "report_received_qty": 180,
+        "report_period": "2024-07"
+      }
+    },
+    {
+      "id": "qty_discrepancy_gamma",
+      "question": "Are there quantity mismatches for SKU-3001?",
+      "expect": {
+        "type": "discrepancy_alert",
+        "sku": "SKU-3001",
+        "invoice_id": "INV-301",
+        "invoice_qty": 100,
+        "report_received_qty": 95,
+        "report_period": "2024-08"
+      }
+    },
+    {
       "id": "invoices_over_5000",
       "question": "Which invoices are over $5,000?",
       "expect": {
         "type": "citation",
-        "invoice_ids": [
-          "INV-102"
-        ]
+        "invoice_ids": ["INV-102"]
       }
     },
     {
@@ -49,15 +80,11 @@
       }
     },
     {
-      "id": "qty_discrepancy_beta",
-      "question": "Did we receive everything billed on INV-201?",
+      "id": "multi_discrepancy_scan",
+      "question": "Are there quantity mismatches between invoices and product reports?",
       "expect": {
-        "type": "discrepancy_alert",
-        "sku": "SKU-2001",
-        "invoice_id": "INV-201",
-        "invoice_qty": 200,
-        "report_received_qty": 180,
-        "report_period": "2024-07"
+        "type": "alert_count",
+        "min_count": 3
       }
     }
   ]

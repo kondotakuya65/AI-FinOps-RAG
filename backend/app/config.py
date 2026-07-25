@@ -21,11 +21,13 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./dev.db"
 
-    llm_provider: str = "ollama"  # ollama | openai
+    llm_provider: str = "ollama"  # ollama | openai | anthropic | mock
     ollama_base_url: str = "http://localhost:11434"
     ollama_model: str = "phi3:mini"
     openai_api_key: str = ""
     openai_model: str = "gpt-4o-mini"
+    anthropic_api_key: str = ""
+    anthropic_model: str = "claude-3-5-haiku-latest"
     llm_timeout_seconds: float = 25.0
 
     # local | openai | hash (deterministic, for tests / offline CI)

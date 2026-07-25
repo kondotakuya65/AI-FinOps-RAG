@@ -1,4 +1,4 @@
-.PHONY: backend-install backend-run test health fixtures ingest
+.PHONY: backend-install backend-run test health fixtures ingest eval
 
 backend-install:
 	cd backend && python -m venv .venv && .venv/Scripts/pip install -r requirements.txt || .venv/bin/pip install -r requirements.txt
@@ -17,3 +17,6 @@ fixtures:
 
 ingest:
 	cd backend && .venv/Scripts/python -m app.ingest.cli || .venv/bin/python -m app.ingest.cli
+
+eval:
+	cd backend && .venv/Scripts/python -m app.eval.cli || .venv/bin/python -m app.eval.cli

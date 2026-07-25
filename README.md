@@ -6,7 +6,7 @@ Portfolio sample: **table-aware RAG** for vendor invoices, product reports, and 
 | --- | --- |
 | **Frontend** | Next.js App Router — upload docs, ask FinOps questions, discrepancy dashboard |
 | **Backend** | FastAPI — ingest → chunk → index → hybrid retrieve → SQL reconcile → LLM explain |
-| **LLM** | Env switch: Ollama (`phi3:mini`) / OpenAI (same adapter pattern as my other samples) |
+| **LLM** | Env switch: Ollama (`phi3:mini`) / OpenAI / Anthropic / mock |
 | **App DB** | Env switch: SQLite (quick demo) / Postgres (Docker) — docs registry + query history |
 | **Vectors** | Chroma (local) + optional BM25 — semantic + exact ID/amount retrieval |
 | **Ledger** | Structured line items in SQL — filters like `total > 5000` and qty mismatch checks |
@@ -14,6 +14,22 @@ Portfolio sample: **table-aware RAG** for vendor invoices, product reports, and 
 Differentiates from narrative RAG ([AI-Resume-Reviewer](https://github.com/kondotakuya65/AI-Resume-Reviewer)) and code RAG ([AI-Code-Reviewer-Sample](https://github.com/kondotakuya65/AI-Code-Reviewer-Sample)).
 
 **Docs:** [Scenario](docs/01-scenario.md) · [Architecture](docs/02-architecture.md) · [Implementation plan](docs/03-implementation-plan.md) · [Data & eval](docs/04-data-and-eval.md) · [Design decisions](docs/05-design-decisions.md) · [Docs index](docs/README.md)
+
+---
+
+## Demo walkthrough
+
+1. Start backend + frontend (Quick start below).  
+2. Open http://localhost:3000 and click **Load fixtures**.  
+3. Run *“Are there quantity mismatches … SKU-1001?”* → **Discrepancy Alert** (500 billed vs 450 received).  
+4. Run *“How much did we spend on Vendor Alpha in Q3?”* → **$10,675.22** from the SQL ledger.  
+5. Optional: enable **Use LLM explanation** once Ollama/`phi3:mini` is warm.
+
+### Screenshots
+
+| Dashboard | Discrepancy result | Spend / answer |
+| --- | --- | --- |
+| ![Dashboard](shots/dashboard.PNG) | ![Result 1](shots/Result1.PNG) | ![Result 2](shots/Result2.PNG) |
 
 ---
 
@@ -123,6 +139,14 @@ curl -s http://localhost:8000/api/query -H "Content-Type: application/json" ^
 
 Numbers always come from the SQL ledger; the LLM only explains. Use `LLM_PROVIDER=mock` for offline demos.
 
+Golden eval (CI uses the same path):
+
+```bash
+# EMBEDDING_PROVIDER=hash LLM_PROVIDER=mock recommended
+python -m app.eval.cli
+# or: pytest tests/test_eval_runner.py -q
+```
+
 ### Frontend
 
 ```bash
@@ -153,7 +177,7 @@ docker compose up --build
 3. **Done:** Ingest (table-aware chunks + SQL ledger + Chroma + content-hash cache)  
 4. **Done:** Query (hybrid retrieve → reconcile → LLM explain → markdown)  
 5. **Done:** Next.js UI (upload / query / alerts) + Docker Compose  
-6. **Eval harness** (golden Q&A)  
+6. **Done:** Eval harness + CI + Anthropic provider  
 7. **Stretch:** upload invoice → match PO / contract unit price alert
 
 ---

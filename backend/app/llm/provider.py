@@ -1,4 +1,4 @@
-"""LLM provider adapter: ollama | openai | mock."""
+"""LLM provider adapter: ollama | openai | anthropic | mock."""
 
 from __future__ import annotations
 
@@ -17,7 +17,6 @@ class MockLLMClient:
     """Deterministic explainer for tests / offline demos."""
 
     def complete(self, system: str, user: str) -> str:
-        # Prefer the deterministic draft embedded by the query service.
         marker = "Deterministic draft to preserve:\n"
         if marker in user:
             draft = user.split(marker, 1)[1].strip()
@@ -78,6 +77,37 @@ class OpenAIClient:
         return data["choices"][0]["message"]["content"]
 
 
+class AnthropicClient:
+    def __init__(self, api_key: str, model: str, timeout: float = 25.0) -> None:
+        self.api_key = api_key
+        self.model = model
+        self.timeout = timeout
+
+    def complete(self, system: str, user: str) -> str:
+        headers = {
+            "x-api-key": self.api_key,
+            "anthropic-version": "2023-06-01",
+            "content-type": "application/json",
+        }
+        payload = {
+            "model": self.model,
+            "max_tokens": 400,
+            "system": system,
+            "messages": [{"role": "user", "content": user}],
+        }
+        with httpx.Client(timeout=self.timeout) as client:
+            response = client.post(
+                "https://api.anthropic.com/v1/messages",
+                headers=headers,
+                json=payload,
+            )
+            response.raise_for_status()
+            data = response.json()
+        blocks = data.get("content") or []
+        texts = [b.get("text", "") for b in blocks if b.get("type") == "text"]
+        return "\n".join(texts).strip()
+
+
 def get_llm_client(settings: Settings | None = None) -> LLMClient:
     settings = settings or get_settings()
     provider = settings.llm_provider.lower()
@@ -88,6 +118,14 @@ def get_llm_client(settings: Settings | None = None) -> LLMClient:
         if not settings.openai_api_key:
             raise ValueError("OPENAI_API_KEY is required when LLM_PROVIDER=openai")
         return OpenAIClient(settings.openai_api_key, settings.openai_model, timeout=timeout)
+    if provider == "anthropic":
+        if not settings.anthropic_api_key:
+            raise ValueError("ANTHROPIC_API_KEY is required when LLM_PROVIDER=anthropic")
+        return AnthropicClient(
+            settings.anthropic_api_key,
+            settings.anthropic_model,
+            timeout=timeout,
+        )
     if provider == "ollama":
         return OllamaClient(settings.ollama_base_url, settings.ollama_model, timeout=timeout)
     raise ValueError(f"Unsupported LLM_PROVIDER: {settings.llm_provider}")

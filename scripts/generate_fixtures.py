@@ -574,8 +574,17 @@ def write_contract_docx(contract: Contract, path: Path) -> None:
 def write_golden_qa(corpus: Corpus) -> None:
     EVALS_DIR.mkdir(parents=True, exist_ok=True)
     alpha_total = alpha_q3_spend(corpus)
+    beta_total = round(
+        sum(
+            inv.total_amount
+            for inv in corpus.invoices
+            if inv.vendor == "Beta Parts" and inv.quarter == "2024-Q3"
+        ),
+        2,
+    )
     payload = {
         "description": "Golden Q&A for FinOps RAG eval — aligned with fixtures/ground_truth.json",
+        "tolerance": 0.01,
         "cases": [
             {
                 "id": "spend_vendor_q3",
@@ -590,6 +599,18 @@ def write_golden_qa(corpus: Corpus) -> None:
                 },
             },
             {
+                "id": "spend_beta_q3",
+                "question": "How much did we spend on Beta Parts in Q3 2024?",
+                "expect": {
+                    "type": "numeric",
+                    "vendor": "Beta Parts",
+                    "period": "2024-Q3",
+                    "expected_amount": beta_total,
+                    "currency": "USD",
+                    "invoice_ids": ["INV-201", "INV-202"],
+                },
+            },
+            {
                 "id": "qty_discrepancy",
                 "question": "Are there quantity mismatches between invoices and product reports for SKU-1001?",
                 "expect": {
@@ -598,6 +619,30 @@ def write_golden_qa(corpus: Corpus) -> None:
                     "invoice_id": "INV-102",
                     "invoice_qty": 500,
                     "report_received_qty": 450,
+                    "report_period": "2024-08",
+                },
+            },
+            {
+                "id": "qty_discrepancy_beta",
+                "question": "Did we receive everything billed on INV-201?",
+                "expect": {
+                    "type": "discrepancy_alert",
+                    "sku": "SKU-2001",
+                    "invoice_id": "INV-201",
+                    "invoice_qty": 200,
+                    "report_received_qty": 180,
+                    "report_period": "2024-07",
+                },
+            },
+            {
+                "id": "qty_discrepancy_gamma",
+                "question": "Are there quantity mismatches for SKU-3001?",
+                "expect": {
+                    "type": "discrepancy_alert",
+                    "sku": "SKU-3001",
+                    "invoice_id": "INV-301",
+                    "invoice_qty": 100,
+                    "report_received_qty": 95,
                     "report_period": "2024-08",
                 },
             },
@@ -619,15 +664,11 @@ def write_golden_qa(corpus: Corpus) -> None:
                 },
             },
             {
-                "id": "qty_discrepancy_beta",
-                "question": "Did we receive everything billed on INV-201?",
+                "id": "multi_discrepancy_scan",
+                "question": "Are there quantity mismatches between invoices and product reports?",
                 "expect": {
-                    "type": "discrepancy_alert",
-                    "sku": "SKU-2001",
-                    "invoice_id": "INV-201",
-                    "invoice_qty": 200,
-                    "report_received_qty": 180,
-                    "report_period": "2024-07",
+                    "type": "alert_count",
+                    "min_count": len(corpus.discrepancies),
                 },
             },
         ],
