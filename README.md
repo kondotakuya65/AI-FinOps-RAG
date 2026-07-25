@@ -77,16 +77,11 @@ flowchart TB
 
 ```
 /
-├── backend/app/
-│   ├── api/          health, ingest, query
-│   ├── db/           SQLAlchemy models + session (sqlite | postgres)
-│   ├── llm/          ollama | openai adapter
-│   ├── ingest/       PDF/Excel/DOCX → table-aware chunks + ledger rows
-│   ├── retrieve/     Chroma + BM25 + hybrid
-│   ├── ledger/       structured amounts / quantities
-│   └── reconcile/    invoice ↔ report mismatch detection
-├── frontend/         Next.js workspace (scaffold next)
-├── fixtures/         synthetic invoices, reports, contract, golden Q&A
+├── backend/app/       FastAPI + ingest/retrieve/ledger/reconcile
+├── frontend/          Next.js workspace
+├── fixtures/          synthetic invoices, reports, contract, ground truth
+├── scripts/           generate_fixtures.py (rebuild corpus from code)
+├── docs/              scenario, architecture, implementation plan
 ├── docker-compose.yml
 └── .env.example
 ```
@@ -125,7 +120,7 @@ docker compose up --build
 ## Roadmap
 
 1. **Done:** README, env knobs, backend skeleton, fixtures layout, `/docs`, Next.js shell + favicon  
-2. **Synthetic dataset** + ground-truth JSON (intentional discrepancies)  
+2. **Done:** Synthetic dataset + ground-truth JSON (intentional discrepancies)  
 3. **Ingest:** table-aware chunking + SQL ledger + Chroma index + content-hash cache  
 4. **Query:** hybrid retrieve → reconcile → LLM explain → markdown summary  
 5. **Next.js UI** (upload / query / alerts) + Docker Compose polish  

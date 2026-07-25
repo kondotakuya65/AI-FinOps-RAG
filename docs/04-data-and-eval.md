@@ -4,13 +4,15 @@
 
 ```text
 fixtures/
-├── invoices/          # PDF invoices (varied layouts)
-├── reports/           # monthly SKU performance .xlsx
+├── invoices/          # 8 PDF invoices (varied layouts)
+├── reports/           # 3 monthly product performance .xlsx
 ├── contracts/         # vendor terms .docx
-├── ground_truth.json  # (planned) authoritative totals & mismatches
+├── ground_truth.json  # authoritative totals & mismatches
 └── evals/
     └── golden_qa.json # question → expected behavior
 ```
+
+Regenerate anytime with `python scripts/generate_fixtures.py` (see `fixtures/README.md`).
 
 ## Document types
 
@@ -38,33 +40,29 @@ Layout variants to stress table extraction:
 - Payment terms (e.g. Net-30)  
 - Optional agreed unit prices for stretch “price drift” alerts  
 
-## Ground truth (planned shape)
+## Ground truth
+
+Source of truth is coded in `scripts/generate_fixtures.py`, which writes `fixtures/ground_truth.json` and all binary docs.
+
+Key demo aggregate:
+
+- `aggregates.alpha_supplies_2024_q3_spend` = **10675.22** (INV-101 + INV-102 + INV-103)
+
+Example discrepancy:
 
 ```json
 {
-  "vendors": ["Alpha Supplies", "Beta Parts"],
-  "invoices": [
-    {
-      "invoice_id": "INV-102",
-      "vendor": "Alpha Supplies",
-      "total_amount": 5430.22,
-      "lines": [{ "sku": "SKU-1001", "qty": 500 }]
-    }
-  ],
-  "discrepancies": [
-    {
-      "id": "disc-sku-1001",
-      "sku": "SKU-1001",
-      "invoice_id": "INV-102",
-      "invoice_qty": 500,
-      "report_received_qty": 450,
-      "severity": "quantity_mismatch"
-    }
-  ]
+  "id": "disc-sku-1001",
+  "sku": "SKU-1001",
+  "invoice_id": "INV-102",
+  "invoice_qty": 500,
+  "report_period": "2024-08",
+  "report_received_qty": 450,
+  "severity": "quantity_mismatch"
 }
 ```
 
-Generators must write PDFs/XLSX **from** this truth (or verify against it) so eval never depends on brittle OCR guesses.
+Generators write PDFs/XLSX **from** this truth so eval never depends on brittle OCR guesses.
 
 ## Golden Q&A
 

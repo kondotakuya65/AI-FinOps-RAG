@@ -1,0 +1,343 @@
+{
+  "version": 1,
+  "currency": "USD",
+  "vendors": [
+    "Alpha Supplies",
+    "Beta Parts",
+    "Gamma Logistics"
+  ],
+  "aggregates": {
+    "alpha_supplies_2024_q3_spend": 10675.22
+  },
+  "invoices": [
+    {
+      "invoice_id": "INV-101",
+      "vendor": "Alpha Supplies",
+      "invoice_date": "2024-07-15",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_top",
+      "column_order": "qty_then_price",
+      "file_name": "inv-101.pdf",
+      "total_amount": 2250.0,
+      "lines": [
+        {
+          "sku": "SKU-1001",
+          "description": "Widget A",
+          "qty": 100,
+          "unit_price": 10.0,
+          "line_total": 1000.0
+        },
+        {
+          "sku": "SKU-1002",
+          "description": "Widget B",
+          "qty": 50,
+          "unit_price": 25.0,
+          "line_total": 1250.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-102",
+      "vendor": "Alpha Supplies",
+      "invoice_date": "2024-08-20",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_middle",
+      "column_order": "qty_then_price",
+      "file_name": "inv-102.pdf",
+      "total_amount": 5430.22,
+      "lines": [
+        {
+          "sku": "SKU-1001",
+          "description": "Widget A",
+          "qty": 500,
+          "unit_price": 10.0,
+          "line_total": 5000.0
+        },
+        {
+          "sku": "SKU-1003",
+          "description": "Widget C",
+          "qty": 20,
+          "unit_price": 21.511,
+          "line_total": 430.22
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-103",
+      "vendor": "Alpha Supplies",
+      "invoice_date": "2024-09-10",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_bottom",
+      "column_order": "price_then_qty",
+      "file_name": "inv-103.pdf",
+      "total_amount": 2995.0,
+      "lines": [
+        {
+          "sku": "SKU-1002",
+          "description": "Widget B",
+          "qty": 80,
+          "unit_price": 25.0,
+          "line_total": 2000.0
+        },
+        {
+          "sku": "SKU-1004",
+          "description": "Widget D",
+          "qty": 10,
+          "unit_price": 99.5,
+          "line_total": 995.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-201",
+      "vendor": "Beta Parts",
+      "invoice_date": "2024-07-01",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_top",
+      "column_order": "price_then_qty",
+      "file_name": "inv-201.pdf",
+      "total_amount": 3000.0,
+      "lines": [
+        {
+          "sku": "SKU-2001",
+          "description": "Bracket Kit",
+          "qty": 200,
+          "unit_price": 15.0,
+          "line_total": 3000.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-202",
+      "vendor": "Beta Parts",
+      "invoice_date": "2024-08-15",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_middle",
+      "column_order": "qty_then_price",
+      "file_name": "inv-202.pdf",
+      "total_amount": 2000.0,
+      "lines": [
+        {
+          "sku": "SKU-2002",
+          "description": "Fastener Pack",
+          "qty": 40,
+          "unit_price": 50.0,
+          "line_total": 2000.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-203",
+      "vendor": "Beta Parts",
+      "invoice_date": "2024-10-05",
+      "quarter": "2024-Q4",
+      "currency": "USD",
+      "layout": "table_bottom",
+      "column_order": "qty_then_price",
+      "file_name": "inv-203.pdf",
+      "total_amount": 150.0,
+      "lines": [
+        {
+          "sku": "SKU-2001",
+          "description": "Bracket Kit",
+          "qty": 10,
+          "unit_price": 15.0,
+          "line_total": 150.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-301",
+      "vendor": "Gamma Logistics",
+      "invoice_date": "2024-08-01",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_top",
+      "column_order": "qty_then_price",
+      "file_name": "inv-301.pdf",
+      "total_amount": 800.0,
+      "lines": [
+        {
+          "sku": "SKU-3001",
+          "description": "Shipper Carton",
+          "qty": 100,
+          "unit_price": 8.0,
+          "line_total": 800.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-302",
+      "vendor": "Gamma Logistics",
+      "invoice_date": "2024-09-20",
+      "quarter": "2024-Q3",
+      "currency": "USD",
+      "layout": "table_middle",
+      "column_order": "price_then_qty",
+      "file_name": "inv-302.pdf",
+      "total_amount": 1000.0,
+      "lines": [
+        {
+          "sku": "SKU-3002",
+          "description": "Pallet Wrap",
+          "qty": 25,
+          "unit_price": 40.0,
+          "line_total": 1000.0
+        }
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "period": "2024-07",
+      "file_name": "product_report_2024_07.xlsx",
+      "rows": [
+        {
+          "sku": "SKU-1001",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 90,
+          "received_qty": 100,
+          "return_rate": 0.02
+        },
+        {
+          "sku": "SKU-1002",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 40,
+          "received_qty": 50,
+          "return_rate": 0.01
+        },
+        {
+          "sku": "SKU-2001",
+          "vendor": "Beta Parts",
+          "sold_qty": 150,
+          "received_qty": 180,
+          "return_rate": 0.03
+        }
+      ]
+    },
+    {
+      "period": "2024-08",
+      "file_name": "product_report_2024_08.xlsx",
+      "rows": [
+        {
+          "sku": "SKU-1001",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 420,
+          "received_qty": 450,
+          "return_rate": 0.025
+        },
+        {
+          "sku": "SKU-1003",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 18,
+          "received_qty": 20,
+          "return_rate": 0.0
+        },
+        {
+          "sku": "SKU-2002",
+          "vendor": "Beta Parts",
+          "sold_qty": 35,
+          "received_qty": 40,
+          "return_rate": 0.01
+        },
+        {
+          "sku": "SKU-3001",
+          "vendor": "Gamma Logistics",
+          "sold_qty": 88,
+          "received_qty": 95,
+          "return_rate": 0.02
+        }
+      ]
+    },
+    {
+      "period": "2024-09",
+      "file_name": "product_report_2024_09.xlsx",
+      "rows": [
+        {
+          "sku": "SKU-1002",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 70,
+          "received_qty": 80,
+          "return_rate": 0.015
+        },
+        {
+          "sku": "SKU-1004",
+          "vendor": "Alpha Supplies",
+          "sold_qty": 9,
+          "received_qty": 10,
+          "return_rate": 0.0
+        },
+        {
+          "sku": "SKU-3002",
+          "vendor": "Gamma Logistics",
+          "sold_qty": 22,
+          "received_qty": 25,
+          "return_rate": 0.01
+        }
+      ]
+    }
+  ],
+  "discrepancies": [
+    {
+      "id": "disc-sku-1001",
+      "sku": "SKU-1001",
+      "invoice_id": "INV-102",
+      "invoice_qty": 500,
+      "report_period": "2024-08",
+      "report_received_qty": 450,
+      "severity": "quantity_mismatch"
+    },
+    {
+      "id": "disc-sku-2001",
+      "sku": "SKU-2001",
+      "invoice_id": "INV-201",
+      "invoice_qty": 200,
+      "report_period": "2024-07",
+      "report_received_qty": 180,
+      "severity": "quantity_mismatch"
+    },
+    {
+      "id": "disc-sku-3001",
+      "sku": "SKU-3001",
+      "invoice_id": "INV-301",
+      "invoice_qty": 100,
+      "report_period": "2024-08",
+      "report_received_qty": 95,
+      "severity": "quantity_mismatch"
+    }
+  ],
+  "contract": {
+    "vendor": "Alpha Supplies",
+    "payment_terms": "Net-30",
+    "effective_date": "2024-01-01",
+    "file_name": "vendor_alpha_contract.docx",
+    "prices": [
+      {
+        "sku": "SKU-1001",
+        "unit_price": 10.0
+      },
+      {
+        "sku": "SKU-1002",
+        "unit_price": 25.0
+      },
+      {
+        "sku": "SKU-1003",
+        "unit_price": 21.511
+      },
+      {
+        "sku": "SKU-1004",
+        "unit_price": 99.5
+      }
+    ]
+  },
+  "notes": [
+    "All totals are derived from line qty * unit_price.",
+    "Three intentional quantity mismatches are listed under discrepancies.",
+    "INV-203 is Q4 2024 and must be excluded from Alpha/Beta Q3 spend demos."
+  ]
+}

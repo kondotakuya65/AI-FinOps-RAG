@@ -1,12 +1,20 @@
 {
-  "description": "Golden Q&A for FinOps RAG eval — expand when synthetic docs land.",
+  "description": "Golden Q&A for FinOps RAG eval \u2014 aligned with fixtures/ground_truth.json",
   "cases": [
     {
       "id": "spend_vendor_q3",
       "question": "How much did we spend on Vendor Alpha in Q3?",
       "expect": {
         "type": "numeric",
-        "notes": "Fill expected_amount after fixtures are generated"
+        "vendor": "Alpha Supplies",
+        "period": "2024-Q3",
+        "expected_amount": 10675.22,
+        "currency": "USD",
+        "invoice_ids": [
+          "INV-101",
+          "INV-102",
+          "INV-103"
+        ]
       }
     },
     {
@@ -14,7 +22,42 @@
       "question": "Are there quantity mismatches between invoices and product reports for SKU-1001?",
       "expect": {
         "type": "discrepancy_alert",
-        "notes": "Expect Discrepancy Alert when invoice qty != received qty"
+        "sku": "SKU-1001",
+        "invoice_id": "INV-102",
+        "invoice_qty": 500,
+        "report_received_qty": 450,
+        "report_period": "2024-08"
+      }
+    },
+    {
+      "id": "invoices_over_5000",
+      "question": "Which invoices are over $5,000?",
+      "expect": {
+        "type": "citation",
+        "invoice_ids": [
+          "INV-102"
+        ]
+      }
+    },
+    {
+      "id": "payment_terms_alpha",
+      "question": "What are the payment terms for Alpha Supplies?",
+      "expect": {
+        "type": "citation",
+        "payment_terms": "Net-30",
+        "source_file": "vendor_alpha_contract.docx"
+      }
+    },
+    {
+      "id": "qty_discrepancy_beta",
+      "question": "Did we receive everything billed on INV-201?",
+      "expect": {
+        "type": "discrepancy_alert",
+        "sku": "SKU-2001",
+        "invoice_id": "INV-201",
+        "invoice_qty": 200,
+        "report_received_qty": 180,
+        "report_period": "2024-07"
       }
     }
   ]

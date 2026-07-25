@@ -12,14 +12,14 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** `GET /api/health` returns provider + DB scheme; UI loads at `:3000` with favicon.
 
-## Phase 1 — Synthetic corpus
+## Phase 1 — Synthetic corpus ✅
 
-- [ ] Generator scripts for 5–8 invoice PDFs (varied table position)  
-- [ ] 2–3 monthly product report `.xlsx` files  
-- [ ] 1 vendor contract `.docx` (Net-30, price terms)  
-- [ ] `fixtures/ground_truth.json` with known totals and **2–3 intentional mismatches**  
+- [x] Generator scripts for 5–8 invoice PDFs (varied table position)  
+- [x] 2–3 monthly product report `.xlsx` files  
+- [x] 1 vendor contract `.docx` (Net-30, price terms)  
+- [x] `fixtures/ground_truth.json` with known totals and **2–3 intentional mismatches**  
 
-**Accept:** Opening fixtures shows readable tables; ground truth matches spreadsheet math.
+**Accept:** Opening fixtures shows readable tables; ground truth matches spreadsheet math (`pytest` + `scripts/generate_fixtures.py`).
 
 ## Phase 2 — Ingest + ledger + index
 
