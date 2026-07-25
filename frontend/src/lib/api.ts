@@ -139,4 +139,5 @@ export const DEMO_QUESTIONS = [
   "What are the payment terms for Alpha Supplies?",
   "Did we receive everything billed on INV-201?",
   "Are there quantity mismatches between invoices and product reports?",
+  "Should we accept INV-104 against the Alpha contract and PO-4452?",
 ] as const;

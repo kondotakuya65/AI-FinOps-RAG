@@ -58,6 +58,7 @@ class Invoice:
     lines: list[LineItem]
     layout: str  # table_top | table_middle | table_bottom
     column_order: str  # qty_then_price | price_then_qty
+    po_number: str = "PO-4452"
     file_name: str = ""
 
     def __post_init__(self) -> None:
@@ -119,6 +120,8 @@ class Contract:
     effective_date: str
     prices: list[ContractPrice]
     file_name: str = "vendor_alpha_contract.docx"
+    approved_po_numbers: list[str] = field(default_factory=lambda: ["PO-4452"])
+    max_price_drift_pct: float = 5.0
 
 
 @dataclass
@@ -225,6 +228,19 @@ def build_corpus() -> Corpus:
                 LineItem("SKU-3002", "Pallet Wrap", 25, 40.00),
             ],
         ),
+        # Stretch: unit price 8% over Alpha contract ($10.00) → Reject (dated Q4 so Q3 spend demos stay stable)
+        Invoice(
+            invoice_id="INV-104",
+            vendor="Alpha Supplies",
+            invoice_date="2024-10-12",
+            currency="USD",
+            layout="table_top",
+            column_order="qty_then_price",
+            po_number="PO-4452",
+            lines=[
+                LineItem("SKU-1001", "Widget A", 50, 10.80),
+            ],
+        ),
     ]
 
     # received_qty matches invoice qty except intentional mismatches below
@@ -293,6 +309,8 @@ def build_corpus() -> Corpus:
             ContractPrice("SKU-1003", 21.511),
             ContractPrice("SKU-1004", 99.50),
         ],
+        approved_po_numbers=["PO-4452"],
+        max_price_drift_pct=5.0,
     )
 
     return Corpus(
@@ -305,6 +323,7 @@ def build_corpus() -> Corpus:
             "All totals are derived from line qty * unit_price.",
             "Three intentional quantity mismatches are listed under discrepancies.",
             "INV-203 is Q4 2024 and must be excluded from Alpha/Beta Q3 spend demos.",
+            "INV-104 matches PO-4452 but SKU-1001 unit price is 8% over contract → Reject.",
         ],
     )
 
@@ -329,6 +348,7 @@ def corpus_to_ground_truth(corpus: Corpus) -> dict:
                 "currency": inv.currency,
                 "layout": inv.layout,
                 "column_order": inv.column_order,
+                "po_number": inv.po_number,
                 "file_name": inv.file_name,
                 "total_amount": inv.total_amount,
                 "lines": [
@@ -369,8 +389,22 @@ def corpus_to_ground_truth(corpus: Corpus) -> dict:
             "payment_terms": corpus.contract.payment_terms,
             "effective_date": corpus.contract.effective_date,
             "file_name": corpus.contract.file_name,
+            "approved_po_numbers": corpus.contract.approved_po_numbers,
+            "max_price_drift_pct": corpus.contract.max_price_drift_pct,
             "prices": [asdict(p) for p in corpus.contract.prices],
         },
+        "price_drifts": [
+            {
+                "id": "drift-inv-104",
+                "invoice_id": "INV-104",
+                "sku": "SKU-1001",
+                "po_number": "PO-4452",
+                "invoice_unit_price": 10.80,
+                "contract_unit_price": 10.00,
+                "drift_pct": 8.0,
+                "recommendation": "Reject",
+            }
+        ],
         "notes": corpus.notes,
     }
 
@@ -404,6 +438,7 @@ def write_invoice_pdf(invoice: Invoice, path: Path) -> None:
         f"<b>Vendor:</b> {invoice.vendor}<br/>"
         f"<b>Date:</b> {invoice.invoice_date}<br/>"
         f"<b>Currency:</b> {invoice.currency}<br/>"
+        f"<b>PO Number:</b> {invoice.po_number}<br/>"
         f"<b>Bill To:</b> Demo Commerce Co.",
         styles["Normal"],
     )
@@ -565,8 +600,12 @@ def write_contract_docx(contract: Contract, path: Path) -> None:
         cells[0].text = price.sku
         cells[1].text = _format_unit_price(price.unit_price)
     document.add_paragraph(
+        f"Approved purchase orders: {', '.join(contract.approved_po_numbers)}. "
+        "Invoices must reference an approved PO."
+    )
+    document.add_paragraph(
         "Unit prices on invoices must match this schedule. A variance greater "
-        "than 5% is grounds for rejection pending renegotiation."
+        f"than {contract.max_price_drift_pct:g}% is grounds for rejection pending renegotiation."
     )
     document.save(path)
 
@@ -669,6 +708,21 @@ def write_golden_qa(corpus: Corpus) -> None:
                 "expect": {
                     "type": "alert_count",
                     "min_count": len(corpus.discrepancies),
+                },
+            },
+            {
+                "id": "price_drift_inv_104",
+                "question": "Should we accept INV-104 against the Alpha contract and PO-4452?",
+                "expect": {
+                    "type": "price_drift",
+                    "invoice_id": "INV-104",
+                    "sku": "SKU-1001",
+                    "po_number": "PO-4452",
+                    "po_match": True,
+                    "invoice_unit_price": 10.80,
+                    "contract_unit_price": 10.00,
+                    "drift_pct": 8.0,
+                    "recommendation": "Reject",
                 },
             },
         ],

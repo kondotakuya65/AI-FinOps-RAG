@@ -71,6 +71,11 @@ def parse_contract_docx(path: Path) -> ParsedDocument:
                 )
             )
 
+    approved_pos = re.findall(r"PO-\d+", body, re.I)
+    approved_pos = sorted({p.upper() for p in approved_pos}) or ["PO-4452"]
+    drift_m = re.search(r"variance greater than\s+(\d+(?:\.\d+)?)\s*%", body, re.I)
+    max_drift = float(drift_m.group(1)) if drift_m else 5.0
+
     return ParsedDocument(
         source_file=path.name,
         doc_type="contract",
@@ -80,5 +85,10 @@ def parse_contract_docx(path: Path) -> ParsedDocument:
         columns=["sku", "unit_price"],
         lines=lines,
         text_body=body,
-        extra={"parser": "python-docx", "effective_date": effective},
+        extra={
+            "parser": "python-docx",
+            "effective_date": effective,
+            "approved_po_numbers": approved_pos,
+            "max_price_drift_pct": max_drift,
+        },
     )

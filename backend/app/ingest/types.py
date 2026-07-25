@@ -33,6 +33,7 @@ class ParsedDocument:
     period: Optional[str] = None
     invoice_date: Optional[str] = None
     payment_terms: Optional[str] = None
+    po_number: Optional[str] = None
     columns: list[str] = field(default_factory=list)
     lines: list[ParsedLine] = field(default_factory=list)
     text_body: str = ""

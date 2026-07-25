@@ -28,6 +28,7 @@ class Document(Base):
     period: Mapped[Optional[str]] = mapped_column(String(32), nullable=True, index=True)
     invoice_date: Mapped[Optional[str]] = mapped_column(String(32), nullable=True)
     payment_terms: Mapped[Optional[str]] = mapped_column(String(64), nullable=True)
+    po_number: Mapped[Optional[str]] = mapped_column(String(64), nullable=True, index=True)
     chunk_count: Mapped[int] = mapped_column(Integer, default=0)
     extra: Mapped[Optional[dict[str, Any]]] = mapped_column(JSON, nullable=True)
     ingested_at: Mapped[datetime] = mapped_column(

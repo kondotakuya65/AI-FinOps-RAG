@@ -132,6 +132,7 @@ def list_documents(db: Session = Depends(get_db)) -> dict:
                 "period": doc.period,
                 "invoice_date": doc.invoice_date,
                 "payment_terms": doc.payment_terms,
+                "po_number": doc.po_number,
                 "chunk_count": doc.chunk_count,
                 "line_item_count": len(doc.line_items),
             }

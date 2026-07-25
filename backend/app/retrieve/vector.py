@@ -71,8 +71,14 @@ class VectorStore:
 
 
 @lru_cache
-def get_vector_store() -> VectorStore:
-    return VectorStore()
+def get_vector_store():
+    settings = get_settings()
+    backend = settings.vector_backend.lower()
+    if backend in {"postgres", "pgvector"}:
+        from app.retrieve.postgres_vector import PostgresVectorStore
+
+        return PostgresVectorStore(settings)
+    return VectorStore(settings)
 
 
 def clear_vector_store_cache() -> None:

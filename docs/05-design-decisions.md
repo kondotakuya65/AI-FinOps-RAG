@@ -46,9 +46,10 @@ Forbidden as source of truth: sums, qty compares, currency conversion.
 
 Root `fav.png` is copied into the frontend (`public/fav.png` + App Router `icon.png`) so the browser tab matches the project brand from day one of the UI.
 
-## Explicitly deferred
+## Explicitly deferred / optional
 
 - Multi-tenant auth  
-- Real PO system integration  
+- Real ERP / PO system integration (demo uses synthetic `PO-4452`)  
 - Heavy agent frameworks  
-- Streaming token UI (nice-to-have after core query path)
+- Streaming token UI (nice-to-have after core query path)  
+- Native `pgvector` HNSW indexes (schema is ready; default is JSON embeddings in Postgres)

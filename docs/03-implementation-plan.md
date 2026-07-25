@@ -63,11 +63,13 @@ Phased delivery so each step is demable and reviewable. Checkboxes are the worki
 
 **Accept:** CI runs unit tests + offline eval with mocked LLM.
 
-## Phase 6 — Stretch
+## Phase 6 — Stretch ✅
 
-- [ ] Upload invoice → match PO / contract unit price drift  
-- [ ] pgvector instead of (or beside) Chroma  
-- [ ] LlamaParse behind a feature flag for messy real PDFs  
+- [x] Upload invoice → match PO / contract unit price drift (`POST /api/review`, INV-104 demo)  
+- [x] Postgres vector backend beside Chroma (`VECTOR_BACKEND=postgres`)  
+- [x] LlamaParse behind a feature flag (`PDF_PARSER=llamaparse`)  
+
+**Accept:** Reviewing INV-104 returns **Reject** — PO-4452 matches, but unit price is ~8% over contract.
 
 ## Suggested build order (day-to-day)
 

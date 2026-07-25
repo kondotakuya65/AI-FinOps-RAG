@@ -52,6 +52,12 @@ class IngestSummary:
 def parse_file(path: Path) -> ParsedDocument:
     suffix = path.suffix.lower()
     if suffix == ".pdf":
+        from app.config import get_settings
+
+        if get_settings().pdf_parser.lower() == "llamaparse":
+            from app.ingest.llamaparse_pdf import parse_invoice_with_llamaparse
+
+            return parse_invoice_with_llamaparse(path)
         return parse_invoice_pdf(path)
     if suffix in {".xlsx", ".xls"}:
         return parse_report_xlsx(path)

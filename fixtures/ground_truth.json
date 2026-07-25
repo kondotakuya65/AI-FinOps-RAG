@@ -18,6 +18,7 @@
       "currency": "USD",
       "layout": "table_top",
       "column_order": "qty_then_price",
+      "po_number": "PO-4452",
       "file_name": "inv-101.pdf",
       "total_amount": 2250.0,
       "lines": [
@@ -45,6 +46,7 @@
       "currency": "USD",
       "layout": "table_middle",
       "column_order": "qty_then_price",
+      "po_number": "PO-4452",
       "file_name": "inv-102.pdf",
       "total_amount": 5430.22,
       "lines": [
@@ -72,6 +74,7 @@
       "currency": "USD",
       "layout": "table_bottom",
       "column_order": "price_then_qty",
+      "po_number": "PO-4452",
       "file_name": "inv-103.pdf",
       "total_amount": 2995.0,
       "lines": [
@@ -99,6 +102,7 @@
       "currency": "USD",
       "layout": "table_top",
       "column_order": "price_then_qty",
+      "po_number": "PO-4452",
       "file_name": "inv-201.pdf",
       "total_amount": 3000.0,
       "lines": [
@@ -119,6 +123,7 @@
       "currency": "USD",
       "layout": "table_middle",
       "column_order": "qty_then_price",
+      "po_number": "PO-4452",
       "file_name": "inv-202.pdf",
       "total_amount": 2000.0,
       "lines": [
@@ -139,6 +144,7 @@
       "currency": "USD",
       "layout": "table_bottom",
       "column_order": "qty_then_price",
+      "po_number": "PO-4452",
       "file_name": "inv-203.pdf",
       "total_amount": 150.0,
       "lines": [
@@ -159,6 +165,7 @@
       "currency": "USD",
       "layout": "table_top",
       "column_order": "qty_then_price",
+      "po_number": "PO-4452",
       "file_name": "inv-301.pdf",
       "total_amount": 800.0,
       "lines": [
@@ -179,6 +186,7 @@
       "currency": "USD",
       "layout": "table_middle",
       "column_order": "price_then_qty",
+      "po_number": "PO-4452",
       "file_name": "inv-302.pdf",
       "total_amount": 1000.0,
       "lines": [
@@ -188,6 +196,27 @@
           "qty": 25,
           "unit_price": 40.0,
           "line_total": 1000.0
+        }
+      ]
+    },
+    {
+      "invoice_id": "INV-104",
+      "vendor": "Alpha Supplies",
+      "invoice_date": "2024-10-12",
+      "quarter": "2024-Q4",
+      "currency": "USD",
+      "layout": "table_top",
+      "column_order": "qty_then_price",
+      "po_number": "PO-4452",
+      "file_name": "inv-104.pdf",
+      "total_amount": 540.0,
+      "lines": [
+        {
+          "sku": "SKU-1001",
+          "description": "Widget A",
+          "qty": 50,
+          "unit_price": 10.8,
+          "line_total": 540.0
         }
       ]
     }
@@ -316,6 +345,10 @@
     "payment_terms": "Net-30",
     "effective_date": "2024-01-01",
     "file_name": "vendor_alpha_contract.docx",
+    "approved_po_numbers": [
+      "PO-4452"
+    ],
+    "max_price_drift_pct": 5.0,
     "prices": [
       {
         "sku": "SKU-1001",
@@ -335,9 +368,22 @@
       }
     ]
   },
+  "price_drifts": [
+    {
+      "id": "drift-inv-104",
+      "invoice_id": "INV-104",
+      "sku": "SKU-1001",
+      "po_number": "PO-4452",
+      "invoice_unit_price": 10.8,
+      "contract_unit_price": 10.0,
+      "drift_pct": 8.0,
+      "recommendation": "Reject"
+    }
+  ],
   "notes": [
     "All totals are derived from line qty * unit_price.",
     "Three intentional quantity mismatches are listed under discrepancies.",
-    "INV-203 is Q4 2024 and must be excluded from Alpha/Beta Q3 spend demos."
+    "INV-203 is Q4 2024 and must be excluded from Alpha/Beta Q3 spend demos.",
+    "INV-104 matches PO-4452 but SKU-1001 unit price is 8% over contract \u2192 Reject."
   ]
 }

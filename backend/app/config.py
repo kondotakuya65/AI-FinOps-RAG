@@ -43,6 +43,14 @@ class Settings(BaseSettings):
     fixtures_dir: str = str(_repo_root() / "fixtures")
     chunk_row_size: int = 12
 
+    # Stretch feature flags
+    # pdfplumber | llamaparse
+    pdf_parser: str = "pdfplumber"
+    llama_cloud_api_key: str = ""
+    # chroma | postgres (SQL vector table; pgvector-ready)
+    vector_backend: str = "chroma"
+    price_drift_pct_limit: float = 5.0
+
 
 @lru_cache
 def get_settings() -> Settings:

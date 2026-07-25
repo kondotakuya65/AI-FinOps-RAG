@@ -23,7 +23,8 @@ Differentiates from narrative RAG ([AI-Resume-Reviewer](https://github.com/kondo
 2. Open http://localhost:3000 and click **Load fixtures**.  
 3. Run *“Are there quantity mismatches … SKU-1001?”* → **Discrepancy Alert** (500 billed vs 450 received).  
 4. Run *“How much did we spend on Vendor Alpha in Q3?”* → **$10,675.22** from the SQL ledger.  
-5. Optional: enable **Use LLM explanation** once Ollama/`phi3:mini` is warm.
+5. Optional: enable **Use LLM explanation** once Ollama/`phi3:mini` is warm.  
+6. Stretch: *“Should we accept INV-104 … PO-4452?”* → **Reject** (price 8% over contract).
 
 ### Screenshots
 
@@ -139,7 +140,21 @@ curl -s http://localhost:8000/api/query -H "Content-Type: application/json" ^
 
 Numbers always come from the SQL ledger; the LLM only explains. Use `LLM_PROVIDER=mock` for offline demos.
 
-Golden eval (CI uses the same path):
+### Stretch (Phase 6)
+
+| Flag | Values | Notes |
+| --- | --- | --- |
+| `PDF_PARSER` | `pdfplumber` (default), `llamaparse` | Needs `LLAMA_CLOUD_API_KEY` + `llama-parse` |
+| `VECTOR_BACKEND` | `chroma` (default), `postgres` | Postgres stores embeddings in `vector_chunks` (pgvector-ready) |
+
+Invoice review API:
+
+```bash
+curl -s http://localhost:8000/api/review -H "Content-Type: application/json" ^
+  -d "{\"invoice_id\": \"INV-104\"}"
+```
+
+Expected: `recommendation: Reject` — matches `PO-4452`, but SKU-1001 is ~8% over the Alpha contract unit price.
 
 ```bash
 # EMBEDDING_PROVIDER=hash LLM_PROVIDER=mock recommended
@@ -178,7 +193,7 @@ docker compose up --build
 4. **Done:** Query (hybrid retrieve → reconcile → LLM explain → markdown)  
 5. **Done:** Next.js UI (upload / query / alerts) + Docker Compose  
 6. **Done:** Eval harness + CI + Anthropic provider  
-7. **Stretch:** upload invoice → match PO / contract unit price alert
+7. **Done:** Stretch — PO/price-drift review, Postgres vectors, LlamaParse flag  
 
 ---
 

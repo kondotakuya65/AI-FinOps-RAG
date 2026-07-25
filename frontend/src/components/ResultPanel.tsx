@@ -45,11 +45,24 @@ export function ResultPanel({ result }: Props) {
         ) : null}
       </div>
 
-      {alerts.length > 0 ? (
+      if alerts.length > 0 ? (
         <div className="rounded-xl border border-rose-900/60 bg-rose-950/30 p-5">
           <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-300">
             Discrepancy alerts
           </h2>
+          {result.facts &&
+          typeof result.facts === "object" &&
+          result.facts !== null &&
+          "review" in result.facts &&
+          (result.facts as { review?: { recommendation?: string } }).review?.recommendation ? (
+            <p className="mt-2 text-sm font-semibold text-rose-200">
+              Recommendation:{" "}
+              {
+                (result.facts as { review?: { recommendation?: string } }).review
+                  ?.recommendation
+              }
+            </p>
+          ) : null}
           <div className="mt-3 overflow-auto">
             <table className="min-w-full text-left text-sm text-rose-50/90">
               <thead className="text-xs text-rose-200/70">

@@ -63,6 +63,14 @@ def _extract_meta(text: str) -> dict[str, Any]:
     total = re.search(r"Invoice Total:\s*\$?\s*([\d,]+\.\d{2})", text, re.I)
     if total:
         meta["total_amount"] = _to_float(total.group(1))
+    po = re.search(r"PO\s*(?:Number|#)?\s*:?\s*(PO-?\d+)", text, re.I)
+    if po:
+        meta["po_number"] = po.group(1).upper().replace("PO", "PO-").replace("PO--", "PO-")
+        if not meta["po_number"].startswith("PO-"):
+            meta["po_number"] = "PO-" + re.sub(r"\D", "", meta["po_number"])
+        # normalize PO-4452 style
+        digits = re.sub(r"\D", "", meta["po_number"])
+        meta["po_number"] = f"PO-{digits}"
     return meta
 
 
@@ -129,8 +137,9 @@ def parse_invoice_pdf(path: Path) -> ParsedDocument:
         currency=meta.get("currency", "USD"),
         total_amount=meta.get("total_amount"),
         invoice_date=meta.get("invoice_date"),
+        po_number=meta.get("po_number"),
         columns=columns or ["sku", "description", "qty", "unit_price", "line_total"],
         lines=lines,
         text_body=text,
-        extra={"parser": "pdfplumber"},
+        extra={"parser": "pdfplumber", "po_number": meta.get("po_number")},
     )

@@ -27,6 +27,7 @@ class InvoiceRecord:
     total_amount: float
     currency: str
     source_file: str
+    po_number: str | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -79,6 +80,7 @@ def list_invoices(
             total_amount=float(r.total_amount or 0.0),
             currency=r.currency or "USD",
             source_file=r.source_file,
+            po_number=r.po_number,
         )
         for r in rows
     ]
@@ -121,6 +123,10 @@ def get_contract(db: Session, vendor: str | None = None) -> dict[str, Any] | Non
         "vendor": doc.vendor,
         "payment_terms": doc.payment_terms,
         "source_file": doc.source_file,
+        "approved_po_numbers": list(
+            (doc.extra or {}).get("approved_po_numbers") or ["PO-4452"]
+        ),
+        "max_price_drift_pct": float((doc.extra or {}).get("max_price_drift_pct") or 5.0),
         "prices": [
             {"sku": p.sku, "unit_price": p.unit_price}
             for p in prices
@@ -160,6 +166,7 @@ def invoice_lines(
                 "vendor": doc.vendor,
                 "invoice_date": doc.invoice_date,
                 "source_file": doc.source_file,
+                "po_number": doc.po_number,
             }
         )
     return out

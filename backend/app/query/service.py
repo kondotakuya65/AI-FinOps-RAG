@@ -16,7 +16,8 @@ from app.ledger.queries import (
 from app.llm.provider import get_llm_client
 from app.query.intent import QueryIntent, parse_intent
 from app.query.markdown import render_markdown_dashboard
-from app.reconcile.engine import DiscrepancyAlert, reconcile_quantities
+from app.reconcile.engine import DiscrepancyAlert, reconcile_price_drift, reconcile_quantities
+from app.reconcile.review import review_invoice
 from app.retrieve.hybrid import RetrievedChunk, hybrid_retrieve
 
 
@@ -51,6 +52,13 @@ def _deterministic_answer(intent: QueryIntent, facts: dict[str, Any], alerts: li
             f"Payment terms for {c.get('vendor')} are **{c.get('payment_terms')}** "
             f"(source: {c.get('source_file')})."
         )
+    if intent.intent == "price_review":
+        review = facts.get("review") or {}
+        if review.get("summary"):
+            return str(review["summary"])
+        if alerts:
+            return " ".join(a.get("message") or "" for a in alerts)
+        return "No contract price issues found for the requested invoice."
     if intent.intent == "reconcile":
         if not alerts:
             return "No quantity discrepancies found for the requested filters."
@@ -97,6 +105,20 @@ def run_query(db: Session, question: str, *, use_llm: bool = True) -> dict[str, 
     elif intent.intent == "contract_terms":
         contract = get_contract(db, vendor=intent.vendor)
         facts["contract"] = contract
+    elif intent.intent == "price_review":
+        if intent.invoice_id:
+            review = review_invoice(db, intent.invoice_id, include_qty=False)
+            facts["review"] = review
+            alerts_objs = reconcile_price_drift(
+                db, invoice_id=intent.invoice_id, vendor=intent.vendor or review.get("vendor")
+            )
+        else:
+            alerts_objs = reconcile_price_drift(db, vendor=intent.vendor, sku=intent.sku)
+            facts["review"] = {
+                "recommendation": "Reject" if alerts_objs else "Accept",
+                "summary": alerts_objs[0].message if alerts_objs else "No price drift found.",
+                "alerts": [a.to_dict() for a in alerts_objs],
+            }
     elif intent.intent == "reconcile":
         alerts_objs = reconcile_quantities(
             db,

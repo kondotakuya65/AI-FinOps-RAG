@@ -10,6 +10,7 @@ IntentType = Literal[
     "spend_aggregate",
     "invoice_filter",
     "reconcile",
+    "price_review",
     "contract_terms",
     "general",
 ]
@@ -92,6 +93,25 @@ def parse_intent(question: str) -> QueryIntent:
     notes: list[str] = []
 
     if any(
+        w in lower
+        for w in (
+            "accept",
+            "reject",
+            "price drift",
+            "unit price",
+            "over contract",
+            "against the",
+            "po-",
+            "purchase order",
+        )
+    ) and (
+        inv_m
+        or "contract" in lower
+        or "po-" in lower
+        or "price" in lower
+    ):
+        intent = "price_review"
+    elif any(
         w in lower
         for w in (
             "mismatch",

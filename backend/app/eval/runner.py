@@ -164,6 +164,49 @@ def evaluate_case(
                 f"{case_id}: expected >= {expected_count} alerts, got {len(alerts)}"
             )
 
+    elif etype == "price_drift":
+        review = (result.get("facts") or {}).get("review") or {}
+        alerts = result.get("alerts") or review.get("alerts") or []
+        recommendation = review.get("recommendation") or expect.get("recommendation")
+        if expect.get("recommendation") and review.get("recommendation") != expect["recommendation"]:
+            # also accept recommendation on alert
+            alert_recs = {a.get("recommendation") for a in alerts}
+            if expect["recommendation"] not in alert_recs and expect["recommendation"] not in (
+                result.get("answer") or ""
+            ):
+                errors.append(
+                    f"{case_id}: recommendation {review.get('recommendation')} != {expect['recommendation']}"
+                )
+        match = None
+        for alert in alerts:
+            if expect.get("invoice_id") and alert.get("invoice_id") != expect["invoice_id"]:
+                continue
+            if expect.get("sku") and alert.get("sku") != expect["sku"]:
+                continue
+            if alert.get("severity") in {None, "price_drift"} or alert.get("drift_pct") is not None:
+                match = alert
+                break
+        if match is None and expect.get("invoice_id"):
+            errors.append(f"{case_id}: missing price_drift alert for {expect.get('invoice_id')}")
+        elif match is not None:
+            if "drift_pct" in expect and abs(float(match.get("drift_pct") or 0) - float(expect["drift_pct"])) > tolerance:
+                errors.append(
+                    f"{case_id}: drift_pct {match.get('drift_pct')} != {expect['drift_pct']}"
+                )
+            if expect.get("po_number") and match.get("po_number") != expect["po_number"]:
+                if review.get("po_number") != expect["po_number"]:
+                    errors.append(f"{case_id}: po_number mismatch")
+            if expect.get("po_match") is True and not (
+                match.get("po_match") or review.get("po_match")
+            ):
+                errors.append(f"{case_id}: expected po_match=true")
+        answer = result.get("answer") or ""
+        if expect.get("recommendation") == "Reject" and "Reject" not in answer and "Reject" not in (
+            review.get("summary") or ""
+        ):
+            errors.append(f"{case_id}: answer missing Reject recommendation")
+        _ = recommendation
+
     else:
         errors.append(f"{case_id}: unknown expect.type {etype}")
 

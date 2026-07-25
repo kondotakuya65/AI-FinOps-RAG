@@ -35,6 +35,7 @@ def replace_document_ledger(
         period=parsed.period,
         invoice_date=parsed.invoice_date,
         payment_terms=parsed.payment_terms,
+        po_number=parsed.po_number,
         chunk_count=chunk_count,
         extra=parsed.extra,
     )
