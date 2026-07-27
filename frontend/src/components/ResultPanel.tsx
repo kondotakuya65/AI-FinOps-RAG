@@ -45,7 +45,7 @@ export function ResultPanel({ result }: Props) {
         ) : null}
       </div>
 
-      if alerts.length > 0 ? (
+      {alerts.length > 0 ? (
         <div className="rounded-xl border border-rose-900/60 bg-rose-950/30 p-5">
           <h2 className="text-sm font-semibold uppercase tracking-[0.16em] text-rose-300">
             Discrepancy alerts

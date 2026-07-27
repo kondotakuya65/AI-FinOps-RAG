@@ -29,7 +29,7 @@ jobs:
           DATABASE_URL: sqlite:///./ci.db
           CHROMA_PERSIST_DIR: ./.chroma-ci
           FIXTURES_DIR: ${{ github.workspace }}/fixtures
-        run: pytest -q
+        run: python -m pytest -q
 
   frontend:
     runs-on: ubuntu-latest
